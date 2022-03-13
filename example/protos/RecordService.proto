@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.RecordService";
+option java_outer_classname = "RecordServiceProto";
+option objc_class_prefix = "HLW";
+
+package RecordService;
+
+// The greeting service definition.
+service RecordService {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  
+  rpc makeAppointment(MKAppRequest) returns (MKAppResponse) {}
+  rpc getAppointment(getApp) returns (getAppReply) {}
+  rpc CompleteAppointment(CompleteApp) returns (CompleteAppReply) {}
+
+}
+
+
+//-------------------------------------------------deprecated one
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+
+message MKAppRequest{
+    string UserId=1;
+    string EmpId=2;
+    string Date=3;
+    string Status=4;
+}
+
+message CompleteApp{
+    string UserId=1;
+    string EmpId=2;
+    string Date=3;
+}
+
+
+message CompleteAppReply{
+  string message = 1;
+}
+
+message MKAppResponse{
+    string message=1;
+}
+
+message getApp {}
+
+message getAppReply{
+  repeated MKAppRequest message = 1;
+}

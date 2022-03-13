@@ -1,0 +1,134 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.AuthService";
+option java_outer_classname = "AuthServiceProto";
+option objc_class_prefix = "HLW";
+
+package AuthService; 
+import "staff.proto";
+import "RecordService.proto";
+// The greeting service definition.
+service AuthService {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  rpc LotteryGenerator (LotteryRequest) returns (LotteryResponse) {}
+
+  rpc RegisterUser (UserRegisterCredential) returns (UserRegisterationResponse) {}
+  rpc AuthenticateUser (UserCredentialRequest) returns (UserAuthenticationResponse) {}
+  
+  rpc RegisterEmploy (EmployRegisterCredential) returns (EmployRegisterationResponse) {}
+  rpc AuthenticateEmploy (EmployCredentialRequest) returns (EmployAuthenticationResponse) {}
+
+  //Calling to MC2
+  rpc ListOfAllDept (staff.listDept) returns (staff.listDeptReply) {}
+  rpc ListOfAllDoctor (staff.listDoc) returns (staff.listDocReply) {}
+  rpc AddDepartment (staff.AddDept) returns (staff.AddDeptReply) {}
+
+  //calling service from MC3
+  rpc MakeAppointment3 (RecordService.MKAppRequest) returns (RecordService.MKAppResponse) {}
+  rpc CompleteAppointment3 (RecordService.CompleteApp) returns (RecordService.CompleteAppReply) {}
+  rpc GetAllAppointment (RecordService.getApp) returns (RecordService.getAppReply) {}
+  // rpc GetAppointment3 () returns () {}
+}
+
+message UserRegisterCredential{
+string UserID=1;  //which is email id.
+string Name=2;
+string BirthDate=3;
+string Password=4; //string
+string Gender=5; //make check on frontend [M,F,N]
+}
+
+message UserRegisterationResponse{
+  string response=1; //success or error response
+}
+
+message UserCredentialRequest{
+  string UserID=1;  //email
+  string Password=2; 
+}
+
+message UserAuthenticationResponse{
+  string response=1;
+  string secretKey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
+}
+
+//--------------------------------Employ
+message EmployRegisterCredential{
+string EmpID=1;  //email id.
+string Qualification=2;
+int32 Fees=3;
+string DeptID=4;
+string role=5; //['D','A']   ===>same backend data. 
+string Name=6;
+string BirthDate=7;
+string Gender=8;
+string Password=9;
+}
+
+message EmployRegisterationResponse{
+  string response=1; //success or error response
+}
+
+message EmployCredentialRequest{
+  string EmpID=1;  //email
+  string Password=2; 
+}
+
+message EmployAuthenticationResponse{
+  string response=1;
+  string secretKey=2;  //push this secret key to list  [ {secretKey,Role=[Admin,Doctor,Patient]} ,make hash of userid and password to generate unique string]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------------------------------------deprecated one
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+
+//for the lottery function 
+message LotteryRequest{
+  int32 randomNumber =1;
+}
+//reponse is yes/no
+message LotteryResponse{
+  string response=1;
+}
